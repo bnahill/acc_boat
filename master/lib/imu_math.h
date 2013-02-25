@@ -130,12 +130,12 @@ public:
 	
 	union {
 		struct {
-			float x,y,z;
+			datatype x,y,z;
 		};
 		struct {
-			float roll, pitch, yaw;
+			datatype roll, pitch, yaw;
 		};
-		float xyz[3];
+		datatype xyz[3];
 	};
 };
 

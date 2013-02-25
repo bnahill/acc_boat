@@ -20,13 +20,11 @@
 
 #include "lib/imu.h"
 
-#include <lib/i2c.h>
 #include <lib/spi.h>
 
 #include <lib/ext.h>
 #include <lib/button.h>
 #include <lib/usbserial.h>
-#include <lib/rtc.h>
 #include <lib/frdm_slave.h>
 
 /*!
@@ -37,8 +35,6 @@
  be instantiantiated in platform.cpp.
  */
 namespace Platform {
-	extern I2C i2c1;
-	
 	extern SPI spi1;
 	extern SPI spi2;
 	
@@ -53,11 +49,11 @@ namespace Platform {
 	typedef USBSerial<USBD1> usbserial1_t;
 	extern usbserial1_t usbserial1;
 	
-	uint32_t constexpr num_slaves = 5;
+	uint32_t constexpr num_slaves = 1;
 	extern FRDMSlave slaves[num_slaves];
 	extern gpio_pin_t sync_pin;
 	
-	typedef RealTimeClock<RTCD1> rtc1;
+	//typedef RealTimeClock<RTCD1> rtc1;
 
 	void early_init();
 };

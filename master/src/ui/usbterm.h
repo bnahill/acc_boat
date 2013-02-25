@@ -2,8 +2,6 @@
 #define __USB_TERM_H_
 
 #include "platform.h"
-#include "acquisition.h"
-#include "ui/ui.h"
 #include "ui/usbfile.h"
 
 class USBTerm;
@@ -95,6 +93,7 @@ protected:
 	int32_t cmd_listcmds(char const *cmd);
 	int32_t cmd_listbuffers(char const *cmd);
 	int32_t cmd_fetchbuffer(char const *cmd);
+	int32_t cmd_read_acc_log(char const *cmd);
 	//! @}
 	
 	//! @name Parsing functions

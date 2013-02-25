@@ -71,17 +71,19 @@ set(OS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/os)
 # Build Options
 ########################################################
 
-set(OPTIMIZATION "-Os")
+set(OPTIMIZATION "-O0")
 set(LTO )#"-flto")
 
 set(MCU cortex-m4)
 
-set(MCFLAGS "-mcpu=${MCU} -g -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -D__NEWLIB__")# -fomit-frame-pointer")
+#set(MCFLAGS "-mcpu=${MCU} -g -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -D__NEWLIB__")# -fomit-frame-pointer")
+set(MCFLAGS "-mcpu=${MCU} -g -mthumb -mfloat-abi=soft -D__NEWLIB__")# -fomit-frame-pointer")
 
 add_definitions(${MCFLAGS})
-add_definitions(-DHSE_VALUE=8000000 -DARM_MATH_CM4 -D__FPU_PRESENT)
+#add_definitions(-DHSE_VALUE=8000000 -DARM_MATH_CM4 -D__FPU_PRESENT)
+add_definitions(-DHSE_VALUE=8000000 -DARM_MATH_CM4 -DCORTEX_USE_FPU=0)
 
-set(LINKER_SCRIPT ${OS_DIR}/ports/GCC/ARMCMx/STM32F4xx/ld/STM32F405xG.ld)
+set(LINKER_SCRIPT ${OS_DIR}/ports/GCC/ARMCMx/STM32F4xx/ld/STM32F407xG.ld)
 
 ###################################################
 # Compiler Flags
@@ -191,18 +193,20 @@ set(OS_SOURCES
 	${OS_DIR}/hal/platforms/STM32/sdc_lld.c
 	${OS_DIR}/hal/platforms/STM32/ext_lld.c
 	${OS_DIR}/various/chprintf.c
-	${OS_DIR}/various/chrtclib.c
+	#${OS_DIR}/various/chrtclib.c
 )
 
 set(APP_SOURCES
 	src/main.cpp
+	src/ui/usbterm.cpp
+	src/ui/usbfile.cpp
 	src/platform/board.c
 	src/platform/platform.cpp
 )
 
 
 set(LIB_SOURCES
-	${LIB_DIR}/i2c.cpp
+	#${LIB_DIR}/i2c.cpp
 	${LIB_DIR}/spi.cpp
 	${LIB_DIR}/imu.cpp
 	${LIB_DIR}/frdm_slave.cpp

@@ -175,8 +175,8 @@
                              PIN_OTYPE_PUSHPULL(GPIOA_SPI1_MISO) |          \
                              PIN_OTYPE_PUSHPULL(GPIOA_SPI1_MOSI))
 #define VAL_GPIOA_OSPEEDR   0xFFFFFFFF
-#define VAL_GPIOA_PUPDR     (PIN_PUDR_PULLUP(0) |                           \
-                             PIN_PUDR_PULLUP(1) |             \
+#define VAL_GPIOA_PUPDR     (PIN_PUDR_FLOATING(GPIOA_BUTTON) |              \
+                             PIN_PUDR_PULLUP(1) |                           \
                              PIN_PUDR_PULLUP(2) |                           \
                              PIN_PUDR_PULLUP(3) |                           \
                              PIN_PUDR_PULLUP(4) |                           \
@@ -192,11 +192,11 @@
                              PIN_PUDR_PULLDOWN(GPIOA_SWCLK) |               \
                              PIN_PUDR_PULLUP(15))
 #define VAL_GPIOA_ODR       (0xFFFFFFFF)
-#define VAL_GPIOA_AFRL      (PIN_AFIO_AF(GPIOA_SPI1_SCK, 5) |               \
+#define VAL_GPIOA_AFRL      (PIN_AFIO_AF(GPIOA_LRCK, 6) |                   \
+                             PIN_AFIO_AF(GPIOA_SPI1_SCK, 5) |               \
                              PIN_AFIO_AF(GPIOA_SPI1_MISO, 5) |              \
                              PIN_AFIO_AF(GPIOA_SPI1_MOSI, 5))
-#define VAL_GPIOA_AFRH      (PIN_AFIO_AF(GPIOA_LRCK, 6) |                   \
-                             PIN_AFIO_AF(GPIOA_OTG_FS_ID, 10) |             \
+#define VAL_GPIOA_AFRH      (PIN_AFIO_AF(GPIOA_OTG_FS_ID, 10) |             \
                              PIN_AFIO_AF(GPIOA_OTG_FS_DM, 10) |             \
                              PIN_AFIO_AF(GPIOA_OTG_FS_DP, 10) |             \
                              PIN_AFIO_AF(GPIOA_SWDIO, 0) |                  \
@@ -290,8 +290,7 @@
                              PIN_PUDR_PULLUP(13) |                          \
                              PIN_PUDR_PULLUP(14) |                          \
                              PIN_PUDR_PULLUP(15))
-#define VAL_GPIOC_ODR       (0xFFFFFFFF &                                   \
-                           ~(PIN(GPIOC_OTG_FS_POWER_ON)))
+#define VAL_GPIOC_ODR       (0xFFFFFFFF)
 #define VAL_GPIOC_AFRL      (PIN_AFIO_AF(GPIOC_MCLK, 6))
 #define VAL_GPIOC_AFRH      (PIN_AFIO_AF(GPIOC_SCLK, 6) |                   \
                              PIN_AFIO_AF(GPIOC_SDIN, 6))

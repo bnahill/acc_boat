@@ -12,8 +12,6 @@
 
 namespace Platform {
 
-I2C i2c1(I2CD1, OPMODE_I2C, FAST_DUTY_CYCLE_2, 100000);
-
 ///////////////////////////////////////////
 // SPI Platform
 ///////////////////////////////////////////
@@ -29,10 +27,10 @@ SPI spi2(SPID2);
 
 FRDMSlave slaves[num_slaves] = {
 	{spi1, GPIOE, 5},
-	{spi1, GPIOE, 6},
-	{spi1, GPIOE, 7},
-	{spi1, GPIOE, 8},
-	{spi1, GPIOE, 9},
+	//{spi1, GPIOE, 6},
+	//{spi1, GPIOE, 7},
+	//{spi1, GPIOE, 8},
+	//{spi1, GPIOE, 9},
 };
 
 gpio_pin_t sync_pin(GPIOE, 4);
@@ -88,8 +86,6 @@ gpio_pin_t leds[4] = {
 };
 
 usbserial1_t usbserial1({GPIOA, 9});
-
-
 
 //////////////////////////////////////////////////////////
 // Platform initialization

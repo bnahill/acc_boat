@@ -24,7 +24,8 @@ ShellCommand const USBTerm::commands[] = {
 	{"settime", "(datetime:date)", (ShellCommand::shell_callback_t)&USBTerm::cmd_settime},
 	{"ping", "s(s:ping)", (ShellCommand::shell_callback_t)&USBTerm::cmd_ping},
 	{"listbuffers", "[s:name,u:length,s:format]()", (ShellCommand::shell_callback_t)&USBTerm::cmd_listbuffers},
-	{"fetchbuffer", "u,logbuffer(s:buffer_name)", (ShellCommand::shell_callback_t)&USBTerm::cmd_fetchbuffer}
+	{"fetchbuffer", "u,logbuffer(s:buffer_name)", (ShellCommand::shell_callback_t)&USBTerm::cmd_fetchbuffer},
+	{"readacclog", "u,u,logbuffer()", (ShellCommand::shell_callback_t)&USBTerm::cmd_read_acc_log}
 };
 
 uint32_t const USBTerm::num_commands = sizeof(commands)/sizeof(*commands);
@@ -44,6 +45,7 @@ void USBTerm::thread_action(){
 	uint32_t i;
 	
 	usbserial1.init();
+	chRegSetThreadName("USBTermThread");
 	
 	iter = command;
 	
@@ -62,9 +64,13 @@ void USBTerm::thread_action(){
 				state = ST_IDLE;
 				iter = command;
 				length = 0;
+				silent_count = 0;
 			}
 			continue;
 		}
+		
+		leds[3].set();
+		
 		// Reset silence counter
 		silent_count = 0;
 		
@@ -113,6 +119,7 @@ int32_t USBTerm::cmd_help(const char* cmd){
 
 
 int32_t USBTerm::cmd_settime(const char* cmd){
+	/*
 	rtc1::rtc_time_t time;
 	
 	parse_string(cmd);
@@ -154,11 +161,11 @@ int32_t USBTerm::cmd_settime(const char* cmd){
 	time.seconds_u = cmd[7] - '0';
 	
 	rtc1::set_time(time);
-	
+	*/
 	return 0;
 	
-error:
-	return 1;
+//error:
+	//return 1;
 }
 
 int32_t USBTerm::cmd_ping(const char* cmd){
@@ -185,6 +192,26 @@ int32_t USBTerm::cmd_listbuffers(const char* cmd){
 int32_t USBTerm::cmd_fetchbuffer(const char* cmd){
 	return 0;
 }
+
+#include "frdm_slave.h"
+extern FRDMSlave::data_t acc_buffer1[num_slaves * FRDMSlave::samples_per_transfer * 500];
+extern FRDMSlave::data_t acc_buffer2[num_slaves * FRDMSlave::samples_per_transfer  * 300];
+extern uint32_t sample_count;
+
+int32_t USBTerm::cmd_read_acc_log(const char* cmd){
+	uint32_t numsensors = num_slaves;
+	usbserial1.write_buffer((uint8_t const *) &numsensors, 4);
+	usbserial1.write_buffer((uint8_t const *) &sample_count, 4);
+	if(sample_count <= (sizeof(acc_buffer1)/sizeof(*acc_buffer1))){
+		usbserial1.write_buffer((uint8_t *)acc_buffer1, sample_count * sizeof(FRDMSlave::data_t));
+		return 0;
+	}
+	usbserial1.write_buffer((uint8_t *)acc_buffer1, sizeof(acc_buffer1));
+	sample_count -= (sizeof(acc_buffer1)/sizeof(*acc_buffer1));
+	usbserial1.write_buffer((uint8_t *)acc_buffer2, sample_count * sizeof(FRDMSlave::data_t));
+	return 0;
+}
+
 
 
 int32_t USBTerm::parse_int(const char*& str){

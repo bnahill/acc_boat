@@ -2,9 +2,6 @@
 #define __UI_USBFILE_H_
 
 #include "platform.h"
-#include "acquisition.h"
-#include "ui/ui.h"
-
 
 //! @addtogroup USBFile
 //! @{

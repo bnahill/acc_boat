@@ -11,14 +11,21 @@
 class FRDMSlave {
 public:
 	typedef Euclidean3<int16_t> data_t;
+	//typedef int16_t data_t;
 	
 	static constexpr uint32_t samples_per_transfer = 32;
 	static constexpr uint32_t sample_rate          = 800;
 	
 	FRDMSlave(SPI &spi, GPIO_TypeDef *gpio, uint16_t bit);
+
+	void init();
 	bool ping();
 	void start_read();
 	void finish_read(data_t * dst);
+	void stop(){
+		uint8_t data = 0x55;
+		spi.send_sync(slave_config, 1, &data);
+	}
 	
 protected:
 	SPI &spi;
@@ -26,7 +33,7 @@ protected:
 	SPI::xfer_t xfer;
 	Semaphore transfer_sem;
 	
-	static constexpr uint32_t header_size          = 1;
+	static constexpr uint32_t header_size          = 0;
 	
 	static constexpr uint32_t transfer_size        = samples_per_transfer * sizeof(data_t) + header_size;
 	

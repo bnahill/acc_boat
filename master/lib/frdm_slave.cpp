@@ -2,12 +2,19 @@
 
 FRDMSlave::FRDMSlave(SPI& spi, GPIO_TypeDef *gpio, uint16_t bit) :
 	spi(spi),
-	slave_config(SPI::mk_slave(*gpio, bit, SPI_CR1_BR_2 | SPI_CR1_BR_1 | SPI_CR1_CPOL | SPI_CR1_CPHA)),
+	slave_config(SPI::mk_slave(*gpio, bit,
+	                           SPI_CR1_BR_1 |
+	                           SPI_CR1_BR_0 | SPI_CR1_CPOL | SPI_CR1_CPHA)),
 	xfer(&slave_config, 0, SPI::OP_EXCHANGE)
 {
 	chSemInit(&transfer_sem, 0);
 	xfer.tc_sem(&transfer_sem);
 }
+
+void FRDMSlave::init(){
+	spi.init();
+}
+
 
 bool FRDMSlave::ping(){
 	return true;

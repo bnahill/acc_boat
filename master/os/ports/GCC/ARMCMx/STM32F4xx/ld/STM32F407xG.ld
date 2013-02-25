@@ -142,7 +142,17 @@ SECTIONS
         *(COMMON)
         . = ALIGN(4);
         PROVIDE(_bss_end = .);
-    } > ram    
+    } > ram
+
+    .ccm :
+    {
+        . = ALIGN(4);
+        *(.ccm)
+        . = ALIGN(4);
+        *(.ccm.*)
+        . = ALIGN(4);
+    } > ccmram
+
 }
 
 PROVIDE(end = .);
